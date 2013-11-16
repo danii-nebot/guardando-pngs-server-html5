@@ -18,5 +18,4 @@
 		echo $fic_name;
 	else
 		echo "ERROR";
-	
 ?>
