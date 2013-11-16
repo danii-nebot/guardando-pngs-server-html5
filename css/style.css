@@ -1,0 +1,16 @@
+body, html {
+  background-color: lightgrey;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+canvas {
+  background-color: white;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
+  display: inline-block;
+  margin: 30px;
+  cursor: default;
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset=utf-8>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+ 
+<canvas id="canvas"></canvas>
+<input type="color" id="color">
+<button id="btSave">SAVE</button>
+
+<script>
+	var mousePressed = false;
+	var lastX, lastY;
+  var context;
+
+  function init() {
+    var canvas = document.getElementById('canvas');
+    context = canvas.getContext('2d');
+
+    document.getElementById('btSave').onmouseup = function() {
+      sendToServer();
+    };
+
+    canvas.onmousedown = function(e) {
+      mousePressed = true;
+      draw(e.offsetX, e.offsetY, false);
+    };
+
+    canvas.onmousemove = function(e) {
+      if (mousePressed) {
+        draw(e.offsetX, e.offsetY, true);
+      }
+    };
+
+    canvas.onmouseup = function(e) {
+      mousePressed = false;
+    };
+    
+    canvas.onmouseleave = function(e) {
+      mousePressed = false;
+    };
+  }
+
+  function draw(x, y, isDown) {
+    if (isDown) {
+      context.beginPath();
+      context.strokeStyle = document.getElementById('color').value;
+      context.lineWidth = 1;
+      context.lineJoin = "round";
+      context.moveTo(lastX, lastY);
+      context.lineTo(x, y);
+      context.closePath();
+      context.stroke();
+    }
+    lastX = x; lastY = y;
+  }
+
+  function sendToServer() {
+    var data = canvas.toDataURL( "image/jpeg", 80);
+    var ajax = new XMLHttpRequest();
+    ajax.open("POST",'http://www.lostiemposcambian.com/blog/posts/guardando-jpgs-html5/snapshot.php',false);
+    ajax.setRequestHeader('Content-Type', 'application/upload');
+    ajax.send(data);
+  }
+  
+  function clearArea() {
+    // Use the identity matrix while clearing the canvas
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  }
+
+  window.onload = init;
+
+</script>
+ 
+</body>
+</html>
