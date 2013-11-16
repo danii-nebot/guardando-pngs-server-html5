@@ -14,11 +14,13 @@
 <script>
 	var mousePressed = false;
 	var lastX, lastY;
-  var context;
+  var ctx;
 
   function init() {
     var canvas = document.getElementById('canvas');
-    context = canvas.getContext('2d');
+    ctx = canvas.getctx('2d');
+    ctx.fillStyle="#FF0000";
+    ctx.fillRect(0,0,150,75);
 
     document.getElementById('btSave').onmouseup = function() {
       sendToServer();
@@ -46,30 +48,35 @@
 
   function draw(x, y, isDown) {
     if (isDown) {
-      context.beginPath();
-      context.strokeStyle = document.getElementById('color').value;
-      context.lineWidth = 1;
-      context.lineJoin = "round";
-      context.moveTo(lastX, lastY);
-      context.lineTo(x, y);
-      context.closePath();
-      context.stroke();
+      ctx.beginPath();
+      ctx.strokeStyle = document.getElementById('color').value;
+      ctx.lineWidth = 1;
+      ctx.lineJoin = "round";
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.closePath();
+      ctx.stroke();
     }
     lastX = x; lastY = y;
   }
 
   function sendToServer() {
-    var data = canvas.toDataURL( "image/jpeg", 80);
-    var ajax = new XMLHttpRequest();
-    ajax.open("POST",'http://www.lostiemposcambian.com/blog/posts/guardando-jpgs-html5/snapshot.php',false);
-    ajax.setRequestHeader('Content-Type', 'application/upload');
-    ajax.send(data);
+    var data = canvas.toDataURL('image/png');
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        alert(xhr.responseText);
+      }
+    }
+    xhr.open('POST','http://www.lostiemposcambian.com/blog/posts/guardando-jpgs-html5/snapshot.php',true);
+    xhr.setRequestHeader('Content-Type', 'application/upload');
+    xhr.send(data);
   }
   
   function clearArea() {
     // Use the identity matrix while clearing the canvas
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
   window.onload = init;
