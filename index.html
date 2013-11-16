@@ -1,92 +1,19 @@
 <!doctype html>
 <html>
-<head>
-	<meta charset=utf-8>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-</head>
-<body>
-  <canvas id="canvas" width="300" height="200"></canvas>
-  <div class="gui">
-    <input type="color" id="color" value="#FFAD40">
-    <button id="bt-clear">CLEAR</button>
-    <button id="bt-save">SAVE</button>
-  </div>
+  <head>
+  	<meta charset=utf-8>
+  	<title></title>
+  	<link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
 
-<script>
-	var mousePressed = false;
-	var lastX, lastY;
-  var ctx;
+  <body>
+    <canvas id="canvas" width="300" height="200"></canvas>
+    <div class="gui">
+      <input type="color" id="color" value="#FF9200">
+      <button id="bt-clear">CLEAR</button>
+      <button id="bt-save">SAVE</button>
+    </div>
 
-  function onLoad() {
-    // init canvas
-    var canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // button events
-    document.getElementById('bt-save').onmouseup = sendToServer;
-    document.getElementById('bt-clear').onmouseup = clearCanvas;
-
-    // canvas events
-    canvas.onmousedown = function(e) {
-      draw(e.layerX, e.layerY);
-      mousePressed = true;
-    };
-
-    canvas.onmousemove = function(e) {
-      if (mousePressed) {
-        draw(e.layerX, e.layerY);
-      }
-    };
-
-    canvas.onmouseup = function(e) {
-      mousePressed = false;
-    };
-    
-    canvas.onmouseleave = function(e) {
-      mousePressed = false;
-    };
-  }
-
-  function draw(x, y) {
-    if (mousePressed) {
-      ctx.beginPath();
-      ctx.strokeStyle = document.getElementById('color').value;
-      ctx.lineWidth = 1;
-      ctx.lineJoin = 'round';
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(x, y);
-      ctx.closePath();
-      ctx.stroke();
-    }
-    lastX = x; lastY = y;
-  }
-
-  function sendToServer() {
-    var data = canvas.toDataURL('image/png');
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      // request complete
-      if (xhr.readyState == 4) {
-        console.log(xhr.responseText);
-      }
-    }
-    xhr.open('POST','http://www.lostiemposcambian.com/blog/posts/guardando-pngs-html5/snapshot.php',true);
-    xhr.setRequestHeader('Content-Type', 'application/upload');
-    xhr.send(data);
-  }
-  
-  function clearCanvas() {
-    // just repaint canvas white
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-
-  window.onload = onLoad;
-
-</script>
- 
-</body>
+  <script src= "script/guardando-pngs.js"></script>
+  </body>
 </html>

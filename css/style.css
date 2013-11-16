@@ -20,17 +20,12 @@ input, select, textarea {
   margin:0; 
   padding: 2px 5px;
   outline:none; 
-  font-family:inherit; 
+  font-family:inherit;
+  background-color: grey;
   box-sizing:border-box; 
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 4px;
-}
-
-input:hover {
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
 }
 
 button {
@@ -48,9 +43,13 @@ button {
   border-radius: 4px;
 }
 
-button:hover, button:active {
+button:hover, button:active, input:hover {
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 1px 5px rgba(0, 0, 0, 0.05);
   background-color: #666666;
 }
+
 
 .gui {
   width: 300px;
