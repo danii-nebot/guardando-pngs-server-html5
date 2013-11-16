@@ -6,34 +6,38 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
- 
-<canvas id="canvas"></canvas>
-<input type="color" id="color">
-<button id="btSave">SAVE</button>
+  <canvas id="canvas" width="300" height="200"></canvas>
+  <div class="gui">
+    <input type="color" id="color" value="#FFAD40">
+    <button id="bt-clear">CLEAR</button>
+    <button id="bt-save">SAVE</button>
+  </div>
 
 <script>
 	var mousePressed = false;
 	var lastX, lastY;
   var ctx;
 
-  function init() {
+  function onLoad() {
+    // init canvas
     var canvas = document.getElementById('canvas');
-    ctx = canvas.getctx('2d');
-    ctx.fillStyle="#FF0000";
-    ctx.fillRect(0,0,150,75);
+    ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    document.getElementById('btSave').onmouseup = function() {
-      sendToServer();
-    };
+    // button events
+    document.getElementById('bt-save').onmouseup = sendToServer;
+    document.getElementById('bt-clear').onmouseup = clearCanvas;
 
+    // canvas events
     canvas.onmousedown = function(e) {
+      draw(e.layerX, e.layerY);
       mousePressed = true;
-      draw(e.offsetX, e.offsetY, false);
     };
 
     canvas.onmousemove = function(e) {
       if (mousePressed) {
-        draw(e.offsetX, e.offsetY, true);
+        draw(e.layerX, e.layerY);
       }
     };
 
@@ -46,12 +50,12 @@
     };
   }
 
-  function draw(x, y, isDown) {
-    if (isDown) {
+  function draw(x, y) {
+    if (mousePressed) {
       ctx.beginPath();
       ctx.strokeStyle = document.getElementById('color').value;
       ctx.lineWidth = 1;
-      ctx.lineJoin = "round";
+      ctx.lineJoin = 'round';
       ctx.moveTo(lastX, lastY);
       ctx.lineTo(x, y);
       ctx.closePath();
@@ -64,22 +68,23 @@
     var data = canvas.toDataURL('image/png');
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
+      // request complete
       if (xhr.readyState == 4) {
-        alert(xhr.responseText);
+        console.log(xhr.responseText);
       }
     }
-    xhr.open('POST','http://www.lostiemposcambian.com/blog/posts/guardando-jpgs-html5/snapshot.php',true);
+    xhr.open('POST','http://www.lostiemposcambian.com/blog/posts/guardando-pngs-html5/snapshot.php',true);
     xhr.setRequestHeader('Content-Type', 'application/upload');
     xhr.send(data);
   }
   
-  function clearArea() {
-    // Use the identity matrix while clearing the canvas
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  function clearCanvas() {
+    // just repaint canvas white
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  window.onload = init;
+  window.onload = onLoad;
 
 </script>
  
